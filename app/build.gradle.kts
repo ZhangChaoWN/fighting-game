@@ -8,6 +8,8 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+    java
+    jacoco
 }
 
 repositories {
@@ -18,6 +20,8 @@ repositories {
 dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)
+
+    testImplementation(libs.mockito.core)
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
@@ -40,4 +44,13 @@ application {
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // Ensure tests run before generating coverage
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
 }
