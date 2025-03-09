@@ -18,10 +18,12 @@ This project includes the Gradle wrapper, so you can run commands starting with 
 ./gradlew jacocoTestReport
 ```
 
-- Run the game
+- Build and run the game
 ```sh
-./gradlew run
+./gradlew shadowJar
+java -jar app/build/libs/my-app-jar-1.0.jar
 ```
+**Note**: the game will fail to start if you run it directly with `./gradlew run` because Gradle redirects standard input.
 
 - Check format and run tests
 ```sh
