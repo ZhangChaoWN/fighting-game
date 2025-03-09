@@ -5,7 +5,7 @@ import org.example.repository.CharacterRepository;
 
 public class CharacterRepositoryImpl implements CharacterRepository {
 
-    Character currentCharacter;
+    private Character currentCharacter;
 
     @Override
     public void saveCurrentCharacter(Character character) {
