@@ -12,12 +12,50 @@ plugins {
     jacoco
     id("com.diffplug.spotless") version "6.9.0"
     id("io.freefair.lombok") version "8.6"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
+
+sourceSets {
+    create("functionalTest") {
+        java {
+            compileClasspath += sourceSets.main.get().output + sourceSets.test.get().output
+            runtimeClasspath += sourceSets.main.get().output + sourceSets.test.get().output
+            srcDir("src/functional-test/java")
+        }
+    }
+}
+
+val functionalTestImplementation: Configuration by configurations.getting {
+    extendsFrom(configurations.implementation.get())
+}
+val functionalTestRuntimeOnly: Configuration by configurations.getting
+
+configurations {
+    configurations["functionalTestImplementation"].extendsFrom(configurations.testImplementation.get())
+    configurations["functionalTestRuntimeOnly"].extendsFrom(configurations.testRuntimeOnly.get())
+}
+
+val functionalTest = task<Test>("functionalTest") {
+    description = "Runs functional tests."
+    group = "verification"
+
+    testClassesDirs = sourceSets["functionalTest"].output.classesDirs
+    classpath = sourceSets["functionalTest"].runtimeClasspath
+    shouldRunAfter("test")
+
+    useJUnitPlatform()
+
+    testLogging {
+        events ("failed", "passed", "skipped", "standard_out")
+    }
+}
+
+tasks.check { dependsOn(functionalTest) }
 
 spotless {
     java {
@@ -68,4 +106,10 @@ tasks.jacocoTestReport {
         xml.required.set(true)
         html.required.set(true)
     }
+}
+
+tasks.shadowJar {
+    archiveBaseName.set("my-app-jar")
+    archiveVersion.set("1.0")
+    archiveClassifier.set("") // No "-all" suffix
 }
