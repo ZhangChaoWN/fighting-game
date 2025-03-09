@@ -10,11 +10,19 @@ plugins {
     application
     java
     jacoco
+    id("com.diffplug.spotless") version "6.9.0"
 }
 
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+}
+
+spotless {
+    java {
+        target("src/**/*.java")
+        palantirJavaFormat()
+    }
 }
 
 dependencies {

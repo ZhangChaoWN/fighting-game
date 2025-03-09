@@ -22,3 +22,13 @@ This project includes the Gradle wrapper, so you can run commands starting with 
 ```sh
 ./gradlew run
 ```
+
+- Check format and run tests
+```sh
+./gradlew check
+```
+
+- Format code
+```sh
+./gradlew :app:spotlessApply
+```
