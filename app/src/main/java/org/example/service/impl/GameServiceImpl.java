@@ -44,11 +44,11 @@ public class GameServiceImpl implements GameService {
     @Override
     public void move(Character character, int deltaX, int deltaY) {
         if (deltaX > 0 && (long) character.getLocationX() + deltaX <= LOCATION_X_MAX
-                || deltaX < 0 && (long) character.getLocationX() + deltaX > LOCATION_X_MIN) {
+                || deltaX < 0 && (long) character.getLocationX() + deltaX >= LOCATION_X_MIN) {
             character.setLocationX(character.getLocationX() + deltaX);
         }
         if (deltaY > 0 && (long) character.getLocationY() + deltaY <= LOCATION_Y_MAX
-                || deltaY < 0 && (long) character.getLocationY() + deltaY > LOCATION_Y_MIN) {
+                || deltaY < 0 && (long) character.getLocationY() + deltaY >= LOCATION_Y_MIN) {
             character.setLocationY(character.getLocationY() + deltaY);
         }
         characterRepository.saveCurrentCharacter(character);

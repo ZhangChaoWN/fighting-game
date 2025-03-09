@@ -35,6 +35,17 @@ class OperationTest {
     }
 
     @Test
+    void shouldBeAbleToZeroIndex() {
+        gameService.move(character, 1, 0);
+        gameService.move(character, -1, 0);
+
+        assertEquals(0, character.getLocationX());
+        assertEquals(0, gameService.queryCurrentCharacter().getLocationX());
+        assertEquals(0, character.getLocationY());
+        assertEquals(0, gameService.queryCurrentCharacter().getLocationY());
+    }
+
+    @Test
     void whenMoveDownAndLeft_ThenUpdateLocation() {
         character.setLocationX(10);
         character.setLocationY(10);
