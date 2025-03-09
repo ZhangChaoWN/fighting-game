@@ -101,7 +101,7 @@ tasks.named<Test>("test") {
 }
 
 tasks.jacocoTestReport {
-    dependsOn(tasks.test, functionalTest)
+    dependsOn(tasks.test, functionalTest, "spotlessJava")
     executionData(fileTree(layout.buildDirectory).include("**/jacoco/test.exec", "**/jacoco/functionalTest.exec"))
     reports {
         xml.required.set(true)
