@@ -8,15 +8,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.example.domain.Character;
 import org.example.service.GameService;
 import org.example.service.impl.GameServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class GameTest {
 
+    GameService gameService;
+    String playerName;
+
+    @BeforeEach
+    public void setUp() {
+        gameService = new GameServiceImpl();
+        playerName = "player_1";
+    }
+
     @Test
     void givenCreatedCharacter_WhenQuery_ThenReturnIt() {
-        GameService gameService = new GameServiceImpl();
-        String playerName = "player_1";
-
         Character character = gameService.createCharacter(playerName);
 
         assertEquals(playerName, character.getName());
