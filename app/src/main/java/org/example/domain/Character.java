@@ -8,4 +8,8 @@ import lombok.Data;
 public class Character {
 
     private String name;
+
+    private Integer locationX;
+
+    private Integer locationY;
 }

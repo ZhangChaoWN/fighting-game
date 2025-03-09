@@ -7,4 +7,6 @@ public interface GameService {
     Character createCharacter(String name);
 
     Character queryCurrentCharacter();
+
+    void move(Character character, int deltaX, int deltaY);
 }
