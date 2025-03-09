@@ -11,9 +11,4 @@ public class GameMapRepositoryImpl implements GameMapRepository {
     public void saveCurrentMap(GameMap map) {
         currentMap = map;
     }
-
-    @Override
-    public GameMap queryCurrentMap() {
-        return currentMap;
-    }
 }
