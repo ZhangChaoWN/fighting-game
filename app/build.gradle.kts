@@ -101,7 +101,8 @@ tasks.named<Test>("test") {
 }
 
 tasks.jacocoTestReport {
-    dependsOn(tasks.test) // Ensure tests run before generating coverage
+    dependsOn(tasks.test, functionalTest)
+    executionData(fileTree(layout.buildDirectory).include("**/jacoco/test.exec", "**/jacoco/functionalTest.exec"))
     reports {
         xml.required.set(true)
         html.required.set(true)
