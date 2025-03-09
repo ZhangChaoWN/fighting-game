@@ -16,4 +16,6 @@ public class Character {
     private Integer locationX;
 
     private Integer locationY;
+
+    private Integer experience;
 }

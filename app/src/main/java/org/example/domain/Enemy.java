@@ -14,4 +14,6 @@ public class Enemy {
     private Integer locationX;
 
     private Integer locationY;
+
+    private Integer bonusExp;
 }

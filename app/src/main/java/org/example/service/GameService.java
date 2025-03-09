@@ -12,4 +12,6 @@ public interface GameService {
     void move(Character character, int deltaX, int deltaY);
 
     GameMap initMap();
+
+    void attack(GameMap gameMap);
 }

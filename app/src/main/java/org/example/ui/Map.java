@@ -1,5 +1,7 @@
 package org.example.ui;
 
+import static org.example.constants.MapConfig.*;
+
 import org.example.domain.GameMap;
 
 public class Map {
@@ -55,7 +57,10 @@ public class Map {
     private static void fillBorderAndEmptySpace(int startX, int startY, char[][] points) {
         for (int i = 0; i < HEIGHT; i++) {
             for (int j = 0; j < WIDTH; j++) {
-                if (startX + j < 0 || startX + j >= WIDTH || startY + i < 0 || startY + i >= HEIGHT) {
+                if (startX + j < LOCATION_X_MIN
+                        || startX + j > LOCATION_X_MAX
+                        || startY + i < LOCATION_Y_MIN
+                        || startY + i > LOCATION_Y_MAX) {
                     points[i][j] = BORDER_SYMBOL;
                 } else {
                     points[i][j] = EMPTY_SYMBOL;

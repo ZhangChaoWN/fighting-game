@@ -5,7 +5,10 @@ package org.example;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import org.example.domain.Character;
+import org.example.domain.Enemy;
 import org.example.domain.GameMap;
 import org.example.service.GameService;
 import org.example.service.impl.GameServiceImpl;
@@ -16,11 +19,17 @@ class GameTest {
 
     GameService gameService;
     String playerName;
+    GameMap gameMap;
 
     @BeforeEach
     public void setUp() {
         gameService = new GameServiceImpl();
         playerName = "player_1";
+
+        gameService.createCharacter("player");
+        gameMap = gameService.initMap();
+        gameMap.getCharacter().setLocationX(0);
+        gameMap.getCharacter().setLocationY(1);
     }
 
     @Test
@@ -36,5 +45,27 @@ class GameTest {
         GameMap gameMap = gameService.initMap();
 
         assertFalse(gameMap.getEnemies().isEmpty());
+    }
+
+    @Test
+    void enemyShouldDisappearWhenAttacked() {
+        gameMap.setEnemies(new ArrayList<>(Arrays.asList(
+                Enemy.builder().locationX(0).locationY(2).bonusExp(1).build(),
+                Enemy.builder().locationX(3).locationY(4).bonusExp(1).build())));
+
+        gameService.attack(gameMap);
+
+        assertEquals(1, gameMap.getEnemies().size());
+    }
+
+    @Test
+    void enemyShouldRemainIntactWhenTooFar() {
+        gameMap.setEnemies(new ArrayList<>(Arrays.asList(
+                Enemy.builder().locationX(0).locationY(3).bonusExp(1).build(),
+                Enemy.builder().locationX(3).locationY(4).bonusExp(1).build())));
+
+        gameService.attack(gameMap);
+
+        assertEquals(2, gameMap.getEnemies().size());
     }
 }
