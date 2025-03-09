@@ -5,6 +5,8 @@ package org.example;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.example.domain.Character;
@@ -12,6 +14,7 @@ import org.example.domain.Enemy;
 import org.example.domain.GameMap;
 import org.example.service.GameService;
 import org.example.service.impl.GameServiceImpl;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,14 +25,19 @@ class GameTest {
     GameMap gameMap;
 
     @BeforeEach
-    public void setUp() {
-        gameService = new GameServiceImpl();
+    public void setUp() throws IOException {
+        gameService = new GameServiceImpl("game_data_test.txt");
         playerName = "player_1";
 
-        gameService.createCharacter("player");
+        gameService.createCharacter(playerName);
         gameMap = gameService.initMap();
         gameMap.getCharacter().setLocationX(0);
         gameMap.getCharacter().setLocationY(1);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        new File("game_data_test.txt").delete();
     }
 
     @Test
@@ -41,7 +49,7 @@ class GameTest {
     }
 
     @Test
-    void shouldGenerateEnemiesWhenInitializingMap() {
+    void shouldGenerateEnemiesWhenInitializingMap() throws IOException {
         GameMap gameMap = gameService.initMap();
 
         assertFalse(gameMap.getEnemies().isEmpty());
@@ -67,5 +75,25 @@ class GameTest {
         gameService.attack(gameMap);
 
         assertEquals(2, gameMap.getEnemies().size());
+    }
+
+    @Test
+    void whenSaveAndLoadGameStatus_shouldRecoverCorrectly() throws IOException {
+        gameMap.setEnemies(new ArrayList<>(Arrays.asList(
+                Enemy.builder().locationX(0).locationY(3).bonusExp(1).build(),
+                Enemy.builder().locationX(3).locationY(4).bonusExp(1).build())));
+
+        gameService.saveGame();
+        gameService.initMap();
+        GameMap loadedMap = gameService.queryCurrentMap();
+
+        assertEquals(playerName, loadedMap.getCharacter().getName());
+        assertEquals(0, loadedMap.getCharacter().getLocationX());
+        assertEquals(1, loadedMap.getCharacter().getLocationY());
+        assertEquals(2, loadedMap.getEnemies().size());
+        assertEquals(0, loadedMap.getEnemies().get(0).getLocationX());
+        assertEquals(3, loadedMap.getEnemies().get(0).getLocationY());
+        assertEquals(3, loadedMap.getEnemies().get(1).getLocationX());
+        assertEquals(4, loadedMap.getEnemies().get(1).getLocationY());
     }
 }

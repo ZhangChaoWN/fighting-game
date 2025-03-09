@@ -19,22 +19,28 @@ public class App {
     private static final String CLEAN_SCREEN_ESCAPE = "\033[H\033[2J";
 
     public static void main(String[] args) throws IOException {
-
-        GameService gameService = new GameServiceImpl();
         MainWindow mainWindow = new MainWindow();
         Scanner scanner = new Scanner(System.in);
+        String savePath = parseSavePath(args);
+        GameService gameService = new GameServiceImpl(savePath);
 
         try (scanner) {
-            org.example.domain.Character character = createCharacter(scanner, gameService);
-            GameMap gameMap = gameService.initMap();
+            GameMap gameMap = gameService.loadMap();
+            if (gameMap == null) {
+                createCharacter(scanner, gameService);
+                gameMap = gameService.initMap();
+            }
+
             while (true) {
                 clearScreen();
                 output(mainWindow.render(gameMap));
                 int key = System.in.read();
                 if (key == QUIT_COMMAND || key == EOF) {
+                    gameService.saveGame();
                     break;
                 }
                 char lowerKey = Character.toLowerCase((char) key);
+                org.example.domain.Character character = gameMap.getCharacter();
                 switch (lowerKey) {
                     case MOVE_LEFT -> gameService.move(character, -1, 0);
                     case MOVE_RIGHT -> gameService.move(character, 1, 0);
@@ -62,5 +68,13 @@ public class App {
 
         String name = scanner.nextLine();
         return gameService.createCharacter(name);
+    }
+
+    private static String parseSavePath(String[] args) {
+        if (args.length > 0) {
+            return args[0];
+        } else {
+            return null;
+        }
     }
 }

@@ -2,6 +2,7 @@ package org.example.service.impl;
 
 import static org.example.constants.MapConfig.*;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.example.domain.Character;
@@ -23,6 +24,14 @@ public class GameServiceImpl implements GameService {
     private GameMapRepository gameMapRepository = new GameMapRepositoryImpl();
 
     private Random random = new Random();
+
+    public GameServiceImpl() {}
+
+    public GameServiceImpl(String savePath) {
+        if (savePath != null) {
+            gameMapRepository.setSavePath(savePath);
+        }
+    }
 
     @Override
     public Character createCharacter(String characterName) {
@@ -55,7 +64,13 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public GameMap initMap() {
+    public GameMap initMap() throws IOException {
+
+        GameMap gameMap = gameMapRepository.loadSavedMap();
+        if (gameMap != null) {
+            return gameMap;
+        }
+
         Set<List<Integer>> points = new HashSet<>();
         while (points.size() < MAX_ENEMIES_ON_MAP) {
             int x = random.nextInt(LOCATION_X_MAX - LOCATION_X_MIN + 1);
@@ -63,7 +78,7 @@ public class GameServiceImpl implements GameService {
             points.add(Arrays.asList(x, y));
         }
 
-        GameMap gameMap = GameMap.builder()
+        gameMap = GameMap.builder()
                 .character(queryCurrentCharacter())
                 .enemies(new ArrayList<>(points.stream()
                         .map(p -> Enemy.builder()
@@ -75,6 +90,16 @@ public class GameServiceImpl implements GameService {
                 .build();
         gameMapRepository.saveCurrentMap(gameMap);
         return gameMap;
+    }
+
+    @Override
+    public GameMap loadMap() throws IOException {
+        return gameMapRepository.loadSavedMap();
+    }
+
+    @Override
+    public GameMap queryCurrentMap() {
+        return gameMapRepository.queryCurrentMap();
     }
 
     @Override
@@ -92,5 +117,10 @@ public class GameServiceImpl implements GameService {
                 return;
             }
         }
+    }
+
+    @Override
+    public void saveGame() throws IOException {
+        gameMapRepository.saveCurrentMap(gameMapRepository.queryCurrentMap());
     }
 }

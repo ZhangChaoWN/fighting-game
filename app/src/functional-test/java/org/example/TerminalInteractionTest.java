@@ -2,10 +2,7 @@ package org.example;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,11 +28,12 @@ public class TerminalInteractionTest {
     @AfterEach
     public void tearDown() {
         System.setOut(originalOut);
+        new File("game_data_test.txt").delete();
     }
 
     @Test
     void shouldPromptInputNameWhenStart() throws IOException, InterruptedException {
-        App.main(new String[0]);
+        App.main(new String[] {"game_data_test.txt"});
 
         String expectedOutput = "Enter your name";
         assertTrue(out.toString().contains(expectedOutput));
@@ -43,7 +41,7 @@ public class TerminalInteractionTest {
 
     @Test
     void shouldDisplayNameAfterInput() throws IOException, InterruptedException {
-        App.main(new String[0]);
+        App.main(new String[] {"game_data_test.txt"});
 
         String expectedOutput = "Bob";
         assertTrue(out.toString().contains(expectedOutput));
@@ -51,7 +49,7 @@ public class TerminalInteractionTest {
 
     @Test
     void shouldDisplayMapAfterInputName() throws IOException, InterruptedException {
-        App.main(new String[0]);
+        App.main(new String[] {"game_data_test.txt"});
 
         assertTrue(out.toString().contains("#"));
         assertTrue(out.toString().contains("."));
