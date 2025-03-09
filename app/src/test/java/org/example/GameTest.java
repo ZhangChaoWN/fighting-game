@@ -3,9 +3,10 @@
  */
 package org.example;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.example.domain.Character;
+import org.example.domain.GameMap;
 import org.example.service.GameService;
 import org.example.service.impl.GameServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,5 +29,12 @@ class GameTest {
 
         assertEquals(playerName, character.getName());
         assertEquals(playerName, gameService.queryCurrentCharacter().getName());
+    }
+
+    @Test
+    void shouldGenerateEnemiesWhenInitializingMap() {
+        GameMap gameMap = gameService.initMap();
+
+        assertFalse(gameMap.getEnemies().isEmpty());
     }
 }
