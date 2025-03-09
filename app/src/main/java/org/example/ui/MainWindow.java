@@ -1,12 +1,14 @@
 package org.example.ui;
 
-import org.example.domain.Character;
+import org.example.domain.GameMap;
 
 public class MainWindow {
 
-    private static final String RENDER_TEMPLATE = "Player: %s";
+    private static final String RENDER_TEMPLATE = "Player: %s\n";
 
-    public String render(Character character) {
-        return String.format(RENDER_TEMPLATE, character.getName());
+    private Map map = new Map();
+
+    public String render(GameMap gameMap) {
+        return String.format(RENDER_TEMPLATE, gameMap.getCharacter().getName()) + map.render(gameMap);
     }
 }

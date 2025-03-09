@@ -40,8 +40,6 @@ public class Map {
 
     private static void fillCharacterAndEnemies(
             GameMap gameMap, char[][] points, int centerX, int centerY, int startX, int startY) {
-        points[centerY][centerX] = CHARACTER_SYMBOL;
-
         gameMap.getEnemies().forEach(e -> {
             if (e.getLocationX() - startX >= 0
                     && e.getLocationX() - startX < WIDTH
@@ -50,6 +48,8 @@ public class Map {
                 points[e.getLocationY() - startY][e.getLocationX() - startX] = ENEMY_SYMBOL;
             }
         });
+
+        points[centerY][centerX] = CHARACTER_SYMBOL;
     }
 
     private static void fillBorderAndEmptySpace(int startX, int startY, char[][] points) {

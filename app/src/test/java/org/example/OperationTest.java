@@ -36,13 +36,15 @@ class OperationTest {
 
     @Test
     void whenMoveDownAndLeft_ThenUpdateLocation() {
+        character.setLocationX(10);
+        character.setLocationY(10);
         gameService.move(character, 0, -1);
         gameService.move(character, -1, 0);
 
-        assertEquals(-1, character.getLocationX());
-        assertEquals(-1, gameService.queryCurrentCharacter().getLocationX());
-        assertEquals(-1, character.getLocationY());
-        assertEquals(-1, gameService.queryCurrentCharacter().getLocationY());
+        assertEquals(9, character.getLocationX());
+        assertEquals(9, gameService.queryCurrentCharacter().getLocationX());
+        assertEquals(9, character.getLocationY());
+        assertEquals(9, gameService.queryCurrentCharacter().getLocationY());
     }
 
     @Test

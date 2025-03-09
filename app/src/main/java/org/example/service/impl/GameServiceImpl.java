@@ -13,10 +13,10 @@ import org.example.service.GameService;
 
 public class GameServiceImpl implements GameService {
 
-    private static final Integer LOCATION_X_MAX = 99;
-    private static final Integer LOCATION_X_MIN = -100;
-    private static final Integer LOCATION_Y_MAX = 99;
-    private static final Integer LOCATION_Y_MIN = -100;
+    private static final Integer LOCATION_X_MAX = 120;
+    private static final Integer LOCATION_X_MIN = 0;
+    private static final Integer LOCATION_Y_MAX = 40;
+    private static final Integer LOCATION_Y_MIN = 0;
     private static final int MAX_ENEMIES_ON_MAP = 20;
 
     private CharacterRepository characterRepository = new CharacterRepositoryImpl();
@@ -64,6 +64,7 @@ public class GameServiceImpl implements GameService {
         }
 
         GameMap gameMap = GameMap.builder()
+                .character(queryCurrentCharacter())
                 .enemies(points.stream()
                         .map(p -> Enemy.builder()
                                 .locationX(p.get(0))
