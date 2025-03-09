@@ -11,6 +11,7 @@ plugins {
     java
     jacoco
     id("com.diffplug.spotless") version "6.9.0"
+    id("io.freefair.lombok") version "8.6"
 }
 
 repositories {
@@ -35,6 +36,12 @@ dependencies {
 
     // This dependency is used by the application.
     implementation(libs.guava)
+
+    compileOnly("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
+
+    testCompileOnly("org.projectlombok:lombok:1.18.30")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
